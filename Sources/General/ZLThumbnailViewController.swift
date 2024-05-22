@@ -904,11 +904,22 @@ class ZLThumbnailViewController: UIViewController {
     private func showCamera() {
         let config = ZLPhotoConfiguration.default()
         if config.useCustomCamera {
-            let camera = ZLCustomCamera()
-            camera.takeDoneBlock = { [weak self] image, videoUrl in
-                self?.save(image: image, videoUrl: videoUrl)
+            if let didSelectedCamera = config.didSelectedCamera {
+                let showCamera = didSelectedCamera()
+                if showCamera {
+                    let camera = ZLCustomCamera()
+                    camera.takeDoneBlock = { [weak self] image, videoUrl in
+                        self?.save(image: image, videoUrl: videoUrl)
+                    }
+                    showDetailViewController(camera, sender: nil)
+                }
+            } else {
+                let camera = ZLCustomCamera()
+                camera.takeDoneBlock = { [weak self] image, videoUrl in
+                    self?.save(image: image, videoUrl: videoUrl)
+                }
+                showDetailViewController(camera, sender: nil)
             }
-            showDetailViewController(camera, sender: nil)
         } else {
             if !UIImagePickerController.isSourceTypeAvailable(.camera) {
                 showAlertView(localLanguageTextValue(.cameraUnavailable), self)

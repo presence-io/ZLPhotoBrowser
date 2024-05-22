@@ -44,7 +44,6 @@ public class ZLCustomAlertAction: NSObject {
         self.style = style
         self.handler = handler
         super.init()
-        print("haven test")
     }
 }
 
